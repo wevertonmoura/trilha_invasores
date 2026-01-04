@@ -132,7 +132,7 @@ export default function Home() {
           <div className="absolute inset-0 z-0">
             {/* Atualizado para usar o arquivo brennand-trilhaa.jpg conforme sua pasta public */}
             <Image 
-              src="/brennand-trilha.jpg" 
+              src="/brennand-trilhaa.jpg" 
               alt="Trilha Cachoeira do Brennand"
               fill 
               priority 
