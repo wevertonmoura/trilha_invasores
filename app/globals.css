@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+/* --- ANIMAÇÃO PERSONALIZADA (Infallible Method) --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+/* HACK PARA O AUTOFILL DO CHROME FICAR ESCURO */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #18181b inset !important; /* Cor zinc-950 */
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+/* ANIMAÇÃO DE ENTRADA SUAVE */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Começa 20px para baixo */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Termina na posição certa */
+  }
+}
+
+.animate-enter {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0; /* Começa invisível */
+}
+
+/* Daria um atraso para elementos aparecerem em escadinha */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+/* ANIMAÇÃO PARA A SPLASH SCREEN SUMIR SUAVEMENTE */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+.animate-splash-end {
+  /* Espera 1.5s paradinho, e depois some em 0.5s */
+  animation: fadeOut 0.5s ease-in-out 1.5s forwards;
+}
