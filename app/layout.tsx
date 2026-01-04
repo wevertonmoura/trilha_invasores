@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Trilha dos Invasores - Cachoeira do Brennand",
     description: "Desafio, natureza e superação. Garanta sua vaga agora!",
-    url: "https://invasores-trilha.vercel.app", 
+    url: "https://invasores-trilhaa.vercel.app", 
     siteName: "Invasores",
     images: [
       {
