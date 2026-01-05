@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌲 Trilha dos Invasores - Sistema de Gestão de Inscrições
 
-## Getting Started
+Este é um projeto de alta performance desenvolvido para o **Grupo Invasores**, focado na gestão de inscrições para eventos de ecoturismo. O sistema prioriza uma experiência de usuário fluida ("nível Apple") e um controle rigoroso de escassez de vagas.
 
-First, run the development server:
+## 🚀 Tecnologias Utilizadas
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+* **Frontend:** Next.js (App Router) com TypeScript.
+* **Estilização:** Tailwind CSS com animações customizadas.
+* **Backend:** Supabase (PostgreSQL + Realtime).
+* **Validação:** Zod (Esquemas de dados rigorosos).
+* **Deploy:** Vercel com CI/CD.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Funcionalidades Principais
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **Splash Screen Inteligente:** Animação de entrada que utiliza `sessionStorage` para ser exibida apenas uma vez por sessão.
+* **Controle Dinâmico de Vagas:** Bloqueio automático do formulário de inscrição assim que o limite de 30 vagas é atingido.
+* **Proteção de Rota:** Verificação no lado do cliente que impede acessos diretos à página de inscrição se as vagas estiverem esgotadas.
+* **UX Otimizada:** Máscaras de entrada para telefones e feedback visual de erros em tempo real.
+* **Painel Administrativo:** Área restrita para visualização da lista oficial de participantes.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Estrutura do Projeto
 
-## Learn More
+* `/app`: Rotas e lógica de páginas.
+* `/components`: Componentes modulares (Header, Footer, Botões).
+* `/public`: Ativos visuais (Logos e imagens de fundo otimizadas).
+* `/lib`: Configuração do cliente Supabase.
 
-To learn more about Next.js, take a look at the following resources:
+## 🔧 Configuração e Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Para rodar este projeto localmente ou fazer manutenção:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1.  Clone o repositório: `git clone https://github.com/wevertonmoura/trilha_invasores.git`
+2.  Instale as dependências: `npm install`
+3.  Configure as variáveis de ambiente no arquivo `.env.local`:
+    * `NEXT_PUBLIC_SUPABASE_URL`
+    * `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+4.  Suba as alterações para o GitHub para deploy automático na Vercel.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📅 Evento
+* **Destino:** Cachoeira do Brennand.
+* **Data:** 18 de Janeiro de 2026.
