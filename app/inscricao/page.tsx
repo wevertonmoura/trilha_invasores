@@ -7,9 +7,9 @@ import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { supabase } from '@/lib/supabase'; // Adicionado para checagem de vagas
+import { supabase } from '@/lib/supabase';
 
-// --- FUNÇÃO MÁGICA DE MÁSCARA (Visual) ---
+// --- FUNÇÃO DE MÁSCARA ---
 const formatarTelefone = (valor: string) => {
   const apenasNumeros = valor.replace(/\D/g, '');
   const limitado = apenasNumeros.substring(0, 11);
@@ -19,7 +19,7 @@ const formatarTelefone = (valor: string) => {
   return `(${limitado.substring(0, 2)}) ${limitado.substring(2, 7)}-${limitado.substring(7)}`;
 };
 
-// --- REGRAS DO JOGO (Schema) ---
+// --- REGRAS DE VALIDAÇÃO ---
 const inscricaoSchema = z.object({
   nome: z.string().min(3, 'O nome deve ter pelo menos 3 letras'),
   whatsapp: z.string()
@@ -45,7 +45,6 @@ type FormErrors = { [key: string]: string };
 export default function Inscricao() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [verificandoVagas, setVerificandoVagas] = useState(true); // Novo estado de trava
   const [errors, setErrors] = useState<FormErrors>({});
 
   const [formData, setFormData] = useState({
@@ -57,19 +56,17 @@ export default function Inscricao() {
     termoImagem: false
   });
 
-  // --- NOVA LÓGICA DE TRAVA DE SEGURANÇA ---
+  // --- TRAVA DE SEGURANÇA SILENCIOSA ---
   useEffect(() => {
     async function validarAcesso() {
       const { count, error } = await supabase
         .from('inscritos')
         .select('*', { count: 'exact', head: true });
 
-      // Se houver erro ou se já atingiu o limite de  pessoas
+      // Se já atingiu o limite (ex: 30), expulsa silenciosamente
       if (!error && count !== null && count >= 30) {
         toast.error('Desculpe, as vagas acabaram de ser preenchidas! 🚫');
-        router.push('/'); // Expulsa o usuário para a Home
-      } else {
-        setVerificandoVagas(false); // Libera o formulário
+        router.push('/'); 
       }
     }
     validarAcesso();
@@ -125,11 +122,9 @@ export default function Inscricao() {
 
       if (response.ok) {
         toast.success('Inscrição confirmada! Entrando no grupo VIP... 💚');
-        setFormData({ nome: '', whatsapp: '', email: '', emergenciaNome: '', emergenciaTel: '', termoImagem: false });
         setTimeout(() => {
           window.location.href = 'https://chat.whatsapp.com/H5DWJOz0wcC2PntYSq1t8y'; 
         }, 1500); 
-
       } else {
         toast.error(data.message || 'Erro ao realizar inscrição.');
       }
@@ -139,16 +134,6 @@ export default function Inscricao() {
       setLoading(false);
     }
   };
-
-  // Enquanto verifica no banco de dados, mostra uma tela de carregamento
-  if (verificandoVagas) {
-    return (
-      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center text-white p-4">
-        <div className="animate-spin h-10 w-10 text-emerald-500 mb-4 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full"></div>
-        <p className="font-bold tracking-widest animate-pulse">VERIFICANDO DISPONIBILIDADE DE VAGAS...</p>
-      </div>
-    );
-  }
 
   return (
     <main className="min-h-screen bg-zinc-950 text-white flex flex-col">
@@ -169,7 +154,6 @@ export default function Inscricao() {
         </p>
         
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* ... Todos os seus inputs permanecem iguais aqui ... */}
           <div>
             <label className="block text-sm text-zinc-400 mb-1">Nome Completo</label>
             <input name="nome" type="text" placeholder="Seu nome completo" 
@@ -257,15 +241,7 @@ export default function Inscricao() {
               }
             `}
           >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-5 w-5 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Salvando...
-              </span>
-            ) : 'CONFIRMAR INSCRIÇÃO'}
+            {loading ? 'SALVANDO...' : 'CONFIRMAR INSCRIÇÃO'}
           </button>
         </form>
       </div>
