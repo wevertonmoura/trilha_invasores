@@ -41,7 +41,7 @@ export default function Home() {
         .select('*', { count: 'exact', head: true });
 
       if (!error && count !== null) {
-        if (count >= 100) {
+        if (count >= 25) {
           setVagasEsgotadas(true);
         }
       }
