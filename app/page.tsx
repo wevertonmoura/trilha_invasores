@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { supabase } from '@/lib/supabase'; // Conexão com o banco
+import { supabase } from '@/lib/supabase'; 
 
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true);
@@ -28,12 +28,12 @@ export default function Home() {
       const timer = setTimeout(() => {
         setShowSplash(false);
         sessionStorage.setItem('splash_visto', 'true');
-      }, 4000); // 4 segundos de exibição
+      }, 4000); 
       return () => clearTimeout(timer);
     }
   }, []);
 
-  // 2. VERIFICAR SE JÁ ATINGIU 100 INSCRITOS 📊
+  // 2. VERIFICAR SE JÁ ATINGIU 30 INSCRITOS 📊
   useEffect(() => {
     async function verificarVagas() {
       const { count, error } = await supabase
@@ -41,7 +41,8 @@ export default function Home() {
         .select('*', { count: 'exact', head: true });
 
       if (!error && count !== null) {
-        if (count >= 25) {
+        // Limite atualizado para 30 conforme sua solicitação
+        if (count >= 30) {
           setVagasEsgotadas(true);
         }
       }
@@ -79,10 +80,14 @@ export default function Home() {
     return () => clearInterval(intervalo);
   }, []);
 
+  // FUNÇÃO PARA RENDERIZAR O BOTÃO COM TRAVA DE SEGURANÇA
   const renderBotao = () => {
     if (vagasEsgotadas) {
       return (
-        <button disabled className="bg-red-900/50 text-red-200 border border-red-800 px-10 py-4 rounded-full text-lg font-bold cursor-not-allowed shadow-xl">
+        <button 
+          disabled 
+          className="bg-red-900/50 text-red-200 border border-red-800 px-10 py-4 rounded-full text-lg font-bold cursor-not-allowed shadow-xl transition-all"
+        >
           🚫 VAGAS ESGOTADAS
         </button>
       );
@@ -90,7 +95,10 @@ export default function Home() {
 
     if (!inscricoesAbertas) {
       return (
-        <button disabled className="bg-zinc-700 text-zinc-400 border border-zinc-600 px-10 py-4 rounded-full text-lg font-bold cursor-not-allowed shadow-xl">
+        <button 
+          disabled 
+          className="bg-zinc-700 text-zinc-400 border border-zinc-600 px-10 py-4 rounded-full text-lg font-bold cursor-not-allowed shadow-xl"
+        >
           🔒 INSCRIÇÕES ENCERRADAS
         </button>
       );
@@ -109,10 +117,9 @@ export default function Home() {
   return (
     <main className="bg-zinc-950 min-h-screen flex flex-col relative">
 
-      {/* SPLASH SCREEN OTIMIZADA PARA MOBILE E DESKTOP */}
+      {/* SPLASH SCREEN */}
       {showSplash && (
         <div className="fixed inset-0 bg-zinc-950 z-50 flex items-center justify-center animate-splash-end">
-          {/* Ajustado tamanho (w-44/h-44) para melhor visualização em celulares */}
           <div className="w-44 h-44 md:w-64 md:h-64 rounded-full overflow-hidden flex items-center justify-center border-4 border-white bg-zinc-900 shadow-2xl animate-pulse">
             <img 
               src="/logo.png" 
@@ -123,6 +130,9 @@ export default function Home() {
         </div>
       )}
 
+      {/* DICA: Para o Header não "burlar" a vaga, você pode passar a prop 
+          vagasEsgotadas para ele ou fazer a mesma checagem de banco dentro dele.
+      */}
       <Header />
       
       <div className={`flex-1 ${showSplash ? 'animate-enter delay-[3500ms]' : ''}`}> 
@@ -130,7 +140,6 @@ export default function Home() {
         <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
           
           <div className="absolute inset-0 z-0">
-            {/* Atualizado para usar o arquivo brennand-trilhaa.jpg conforme sua pasta public */}
             <Image 
               src="/brennand-trilhaa.jpg" 
               alt="Trilha Cachoeira do Brennand"
@@ -154,6 +163,7 @@ export default function Home() {
               supere seus limites e explore cenários incríveis.
             </p>
 
+            {/* CRONÔMETRO */}
             <div className="grid grid-cols-4 gap-3 md:gap-6 max-w-lg mx-auto mb-10">
               <div className="bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex flex-col items-center min-w-[70px]">
                 <span className="text-2xl md:text-4xl font-bold text-emerald-500">{timeLeft.dias}</span>
@@ -186,8 +196,7 @@ export default function Home() {
           </h2>
           <p className="text-zinc-400 leading-relaxed text-lg md:text-xl text-justify md:text-center">
             A Trilha dos Invasores na Cachoeira do Brennand é uma experiência imersiva que une desafio,
-            contato direto com a natureza e espírito de comunidade. Durante o percurso, enfrentaremos
-            trechos de mata fechada, riachos e terrenos irregulares.
+            contato direto com a natureza e espírito de comunidade.
           </p>
         </section>
       </div>

@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { supabase } from '@/lib/supabase'; // Adicionado para checagem de vagas
 
 // --- FUNÇÃO MÁGICA DE MÁSCARA (Visual) ---
 const formatarTelefone = (valor: string) => {
@@ -44,6 +45,7 @@ type FormErrors = { [key: string]: string };
 export default function Inscricao() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [verificandoVagas, setVerificandoVagas] = useState(true); // Novo estado de trava
   const [errors, setErrors] = useState<FormErrors>({});
 
   const [formData, setFormData] = useState({
@@ -54,6 +56,24 @@ export default function Inscricao() {
     emergenciaTel: '',
     termoImagem: false
   });
+
+  // --- NOVA LÓGICA DE TRAVA DE SEGURANÇA ---
+  useEffect(() => {
+    async function validarAcesso() {
+      const { count, error } = await supabase
+        .from('inscritos')
+        .select('*', { count: 'exact', head: true });
+
+      // Se houver erro ou se já atingiu o limite de  pessoas
+      if (!error && count !== null && count >= 30) {
+        toast.error('Desculpe, as vagas acabaram de ser preenchidas! 🚫');
+        router.push('/'); // Expulsa o usuário para a Home
+      } else {
+        setVerificandoVagas(false); // Libera o formulário
+      }
+    }
+    validarAcesso();
+  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -107,7 +127,6 @@ export default function Inscricao() {
         toast.success('Inscrição confirmada! Entrando no grupo VIP... 💚');
         setFormData({ nome: '', whatsapp: '', email: '', emergenciaNome: '', emergenciaTel: '', termoImagem: false });
         setTimeout(() => {
-          // ⚠️ COLOQUE O LINK DO SEU GRUPO AQUI
           window.location.href = 'https://chat.whatsapp.com/H5DWJOz0wcC2PntYSq1t8y'; 
         }, 1500); 
 
@@ -120,6 +139,16 @@ export default function Inscricao() {
       setLoading(false);
     }
   };
+
+  // Enquanto verifica no banco de dados, mostra uma tela de carregamento
+  if (verificandoVagas) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center text-white p-4">
+        <div className="animate-spin h-10 w-10 text-emerald-500 mb-4 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full"></div>
+        <p className="font-bold tracking-widest animate-pulse">VERIFICANDO DISPONIBILIDADE DE VAGAS...</p>
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-zinc-950 text-white flex flex-col">
@@ -140,7 +169,7 @@ export default function Inscricao() {
         </p>
         
         <form onSubmit={handleSubmit} className="space-y-5">
-          
+          {/* ... Todos os seus inputs permanecem iguais aqui ... */}
           <div>
             <label className="block text-sm text-zinc-400 mb-1">Nome Completo</label>
             <input name="nome" type="text" placeholder="Seu nome completo" 
@@ -238,7 +267,6 @@ export default function Inscricao() {
               </span>
             ) : 'CONFIRMAR INSCRIÇÃO'}
           </button>
-
         </form>
       </div>
       <Footer />
