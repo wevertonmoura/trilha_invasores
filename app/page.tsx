@@ -42,7 +42,7 @@ export default function Home() {
 
       if (!error && count !== null) {
         // Limite atualizado para 30 conforme sua solicitação
-        if (count >= 30) {
+        if (count >= 50) {
           setVagasEsgotadas(true);
         }
       }
