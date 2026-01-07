@@ -64,7 +64,7 @@ export default function Inscricao() {
         .select('*', { count: 'exact', head: true });
 
       // Se já atingiu o limite (ex: 30), expulsa silenciosamente
-      if (!error && count !== null && count >= 50) {
+      if (!error && count !== null && count >= 80) {
         toast.error('Desculpe, as vagas acabaram de ser preenchidas! 🚫');
         router.push('/'); 
       }
