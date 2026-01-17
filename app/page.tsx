@@ -142,7 +142,7 @@ export default function Home() {
           <div className="absolute inset-0 z-0">
             <Image 
               src="/brennand-trilhaa.jpg" 
-              alt="Trilha Cachoeira do Brennand"
+              alt="Trilha do Brennand"
               fill 
               priority 
               className="object-cover" 
@@ -154,8 +154,8 @@ export default function Home() {
           
           <div className="relative z-10 text-center px-4 max-w-5xl mx-auto mt-16">
             <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-2xl">
-              Trilha Cachoeira <br /> 
-              <span className="text-emerald-500 font-black">do Brennand</span>
+              <br /> 
+              <span className="text-emerald-500 font-black"> Trilha do Brennand</span>
             </h1>
             
             <p className="text-zinc-200 text-lg md:text-xl max-w-2xl mx-auto mb-8 drop-shadow-md font-light">
